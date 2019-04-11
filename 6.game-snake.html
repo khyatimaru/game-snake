@@ -1,0 +1,118 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <title>Snake Game</title>
+    <style>
+        canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid black;
+        }
+        h1 {
+            margin-top:40px;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 2px;
+            width: 100%;
+            height: 30px;
+            background-color: red;
+            color: white;
+            text-align: center;
+        //padding-bottom: 10px;
+
+        }
+        i {
+            margin-right: 7px;
+            margin-top: 7px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 align="center">Snake Game</h1>
+    <canvas id="gc" width="400" height="400"></canvas>
+</div>
+<div class="footer">
+    <span>LinkedIn </span><a href="https://www.linkedin.com/in/khyati-maru" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+    <span>GitHub </span><a href="https://github.com/khyatimaru" target="_blank"><i class="fab fa-github"></i></a>
+</div>
+<script type="text/javascript">
+    window.onload=function () {
+        canv = document.getElementById("gc");
+        ctx=canv.getContext("2d");
+
+        document.addEventListener("keydown", keyPush);
+        setInterval(game, 1000/15);
+    }
+    px=py=10; //player-x and player-y
+    xv=yv=0; //x-velocity and y-velocity
+    gs=tc=20; //grid size and tile count ...both are 20 which means grid is of size 20*20 = 400
+    ax=ay=15; //apple-x and apply-y
+    trail=[];
+    tail =5;
+
+    function game() {
+        px+=xv;
+        py+=yv;
+        if(px < 0) {
+            px = tc-1
+        }
+        if(px > tc-1) {
+            px = 0;
+        }
+        if(py < 0) {
+            py = tc-1;
+        }
+        if(py>tc-1) {
+            py = 0;
+        }
+        ctx.fillStyle="black";
+        ctx.fillRect(0, 0, canv.width, canv.height);
+
+        ctx.fillStyle="lime";
+        for(var i=0; i<trail.length;i++) {
+            ctx.fillRect(trail[i].x*gs, trail[i].y*gs, gs-2, gs-2);
+            if(trail[i].x==px && trail[i].y==py) {
+                tail=5;
+            }
+        }
+
+        trail.push({x:px, y:py});
+        while(trail.length>tail) {
+            trail.shift();
+        }
+
+        if(ax==px && ay==py) {
+            tail++;
+            ax=Math.floor(Math.random()*tc);
+            ay=Math.floor(Math.random()*tc);
+        }
+
+        ctx.fillStyle="red";
+        ctx.fillRect(ax*gs, ay*gs, gs-2, gs-2);
+
+    }
+    function keyPush(evt) {
+        switch(evt.keyCode) {
+            case 37:
+                xv=-1; yv=0;
+                break;
+            case 38:
+                xv=0; yv=-1;
+                break;
+            case 39:
+                xv=1; yv=0;
+                break;
+            case 40:
+                xv=0; yv=1;
+                break;
+        }
+    }
+</script>
+</body>
+</html>
